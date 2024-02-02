@@ -15,6 +15,7 @@
         #svg-container {
             width: 100%;
             max-width: 600px;
+            margin-top: 20px; /* добавил отступ для ясности */
         }
         #svg-selector {
             margin-top: 20px;
@@ -22,12 +23,13 @@
     </style>
 </head>
 <body>
-    <div id="svg-container"></div>
     <select id="svg-selector">
-        <option value="karta.svg">SVG 1</option>
-        <option value="karta2.svg">SVG 2</option>
+        <option value="svg1.svg">SVG 1</option>
+        <option value="svg2.svg">SVG 2</option>
+        <option value="svg3.svg">SVG 3</option>
         <!-- Добавьте дополнительные опции для каждого SVG-файла -->
     </select>
+    <div id="svg-container"></div>
     <script>
         const svgContainer = document.getElementById('svg-container');
         const svgSelector = document.getElementById('svg-selector');
