@@ -2,12 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=2.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVG Viewer</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            height: 100vh;
+        }
+        #svg-container {
+            width: 100%;
+            max-width: 600px;
+        }
+        #svg-selector {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+    <div id="svg-container"></div>
+    <select id="svg-selector">
+        <option value="karta.svg">SVG 1</option>
+        <option value="karta2.svg">SVG 2</option>
+        <!-- Добавьте дополнительные опции для каждого SVG-файла -->
+    </select>
+    <script>
+        const svgContainer = document.getElementById('svg-container');
+        const svgSelector = document.getElementById('svg-selector');
 
-<img src="karta.svg" alt="SVG Image">
+        function loadSvg() {
+            const selectedSvg = svgSelector.value;
+            fetch(selectedSvg)
+                .then(response => response.text())
+                .then(svgText => {
+                    svgContainer.innerHTML = svgText;
+                })
+                .catch(error => console.error('Error loading SVG:', error));
+        }
 
+        // Загрузка SVG-файла при выборе нового значения в выпадающем списке
+        svgSelector.addEventListener('change', loadSvg);
+
+        // Инициализация при открытии страницы
+        loadSvg();
+    </script>
 </body>
 </html>
