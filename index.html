@@ -39,10 +39,12 @@
 
 <body>
     <div id="select-container">
-        <label for="svg-selector">Выберите Режим:</label>
-                    <option value="Политическая карта.svg">Политическая карта</option>
-            <option value="Карта Высот.svg">Карта Высот</option>
+        <label for="svg-selector">Выберите режим:</label>
+        <select id="svg-selector" onchange="loadSVG()">
+            <option value="Политическая в карта.svg">Политическая карта</option>
+            <option value="Карта Высот.svg">Карта высот</option>
             <option value="Карта Биомов.svg">Карта Биомов</option>
+            <!-- Добавьте другие варианты, если необходимо -->
         </select>
     </div>
 
