@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             margin: 0;
             height: 100vh;
         }
+
         #svg-container {
             width: 100%;
             max-width: 600px;
@@ -20,20 +22,26 @@
             box-sizing: border-box;
             overflow: hidden;
         }
+
         #svg-viewport {
             width: 100%;
             height: 100%;
             overflow: auto;
+            cursor: grab;
         }
+
         #svg-selector {
             margin-top: 20px;
         }
-        #zoom-in-btn, #zoom-out-btn {
+
+        #zoom-in-btn,
+        #zoom-out-btn {
             margin-top: 10px;
             cursor: pointer;
         }
     </style>
 </head>
+
 <body>
     <select id="svg-selector">
         <option value="Политическая карта.svg">Политическая карта</option>
@@ -52,6 +60,9 @@
         const zoomInBtn = document.getElementById('zoom-in-btn');
         const zoomOutBtn = document.getElementById('zoom-out-btn');
         let currentScale = 1;
+        let isDragging = false;
+        let dragStartX = 0;
+        let scrollStartX = 0;
 
         function loadSvg() {
             const selectedSvg = svgSelector.value;
@@ -59,7 +70,7 @@
                 .then(response => response.text())
                 .then(svgText => {
                     svgContainer.innerHTML = svgText;
-                    currentScale = 1; // Сбросить текущий масштаб при загрузке нового SVG
+                    currentScale = 1;
                     applyScale();
                 })
                 .catch(error => console.error('Error loading SVG:', error));
@@ -79,15 +90,49 @@
             applyScale();
         }
 
-        // Загрузка SVG-файла при выборе нового значения в выпадающем списке
-        svgSelector.addEventListener('change', loadSvg);
+        function handleMouseDown(event) {
+            if (event.button === 0) {
+                isDragging = true;
+                dragStartX = event.clientX;
+                scrollStartX = svgContainer.scrollLeft;
+                svgContainer.style.cursor = 'grabbing';
+            }
+        }
 
-        // Обработчики для кнопок управления масштабом
+        function handleMouseMove(event) {
+            if (isDragging) {
+                const dragDelta = event.clientX - dragStartX;
+                const newScrollLeft = scrollStartX - dragDelta;
+                const maxScrollLeft = svgContainer.scrollWidth - svgContainer.clientWidth;
+                svgContainer.scrollLeft = Math.min(maxScrollLeft, Math.max(0, newScrollLeft));
+            }
+        }
+
+        function handleMouseUp() {
+            isDragging = false;
+            svgContainer.style.cursor = 'grab';
+        }
+
+        function handleWheel(event) {
+            event.preventDefault();
+            if (event.deltaY > 0) {
+                zoomOut();
+            } else {
+                zoomIn();
+            }
+        }
+
+        svgSelector.addEventListener('change', loadSvg);
         zoomInBtn.addEventListener('click', zoomIn);
         zoomOutBtn.addEventListener('click', zoomOut);
 
-        // Инициализация при открытии страницы
+        svgContainer.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+        svgContainer.addEventListener('wheel', handleWheel);
+
         loadSvg();
     </script>
 </body>
+
 </html>
