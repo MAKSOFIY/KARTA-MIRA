@@ -1,111 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Interactive SVG Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Viewer</title>
     <style>
         body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        #select-container {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-        }
-
-        #svg-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
             height: 100vh;
-            overflow: hidden;
-            z-index: 999;
-            cursor: grab;
         }
-
-        #svg-container.grabbing {
-            cursor: grabbing;
-        }
-
-        svg {
-            display: block;
-            margin: auto;
+        #svg-container {
             width: 100%;
-            height: auto;
+            max-width: 600px;
+            margin-top: 20px; /* добавил отступ для ясности */
+        }
+        #svg-selector {
+            margin-top: 20px;
         }
     </style>
 </head>
-
 <body>
-    <div id="select-container">
-        <label for="svg-selector">Выберите режим:</label>
-        <select id="svg-selector" onchange="loadSVG()">
-            <option value="Политическая в карта.svg">Политическая карта</option>
+    <select id="svg-selector">
+        <option value="Политическая карта.svg">Политическая карта</option>
             <option value="Карта Высот.svg">Карта Высот</option>
             <option value="Карта Биомов.svg">Карта Биомов</option>
-            <!-- Добавьте другие варианты, если необходимо -->
-        </select>
-    </div>
-
-    <div id="svg-container" onmousedown="startDrag(event)" onmouseup="endDrag()" onmouseleave="endDrag()">
-        <svg id="loaded-svg" xmlns="http://www.w3.org/2000/svg">
-            <!-- Пустой SVG-контейнер, который будет заполнен при выборе SVG из списка -->
-        </svg>
-    </div>
-
+        <!-- Добавьте дополнительные опции для каждого SVG-файла -->
+    </select>
+    <div id="svg-container"></div>
     <script>
-        var isDragging = false;
+        const svgContainer = document.getElementById('svg-container');
+        const svgSelector = document.getElementById('svg-selector');
 
-        function startDrag(event) {
-            isDragging = true;
-            var svgContainer = document.getElementById("svg-container");
-            var offsetX = event.clientX - svgContainer.getBoundingClientRect().left;
-            var offsetY = event.clientY - svgContainer.getBoundingClientRect().top;
-
-            function dragMove(event) {
-                if (isDragging) {
-                    var x = event.clientX - offsetX;
-                    var y = event.clientY - offsetY;
-                    svgContainer.style.left = x + "px";
-                    svgContainer.style.top = y + "px";
-                }
-            }
-
-            function dragEnd() {
-                isDragging = false;
-                document.removeEventListener("mousemove", dragMove);
-                document.removeEventListener("mouseup", dragEnd);
-            }
-
-            document.addEventListener("mousemove", dragMove);
-            document.addEventListener("mouseup", dragEnd);
-        }
-
-        function endDrag() {
-            isDragging = false;
-        }
-
-        function loadSVG() {
-            var select = document.getElementById("svg-selector");
-            var selectedValue = select.options[select.selectedIndex].value;
-            var svgContainer = document.getElementById("loaded-svg");
-
-            // Загрузка выбранного SVG-файла в контейнер
-            fetch(selectedValue)
+        function loadSvg() {
+            const selectedSvg = svgSelector.value;
+            fetch(selectedSvg)
                 .then(response => response.text())
-                .then(data => {
-                    svgContainer.innerHTML = data;
+                .then(svgText => {
+                    svgContainer.innerHTML = svgText;
                 })
                 .catch(error => console.error('Error loading SVG:', error));
         }
+
+        // Загрузка SVG-файла при выборе нового значения в выпадающем списке
+        svgSelector.addEventListener('change', loadSvg);
+
+        // Инициализация при открытии страницы
+        loadSvg();
     </script>
 </body>
-
 </html>
