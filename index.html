@@ -12,21 +12,29 @@
             margin: 0;
             height: 100vh;
         }
-   #svg-container {
+  #svg-container {
     width: 100%;
     max-width: 600px;
     margin-top: 20px;
     border: 2px solid #007bff;
     box-sizing: border-box;
     padding: 10px;
-    height: 400px; /* Задайте фиксированную высоту (замените на необходимую величину) */
-    overflow: hidden; /* Если картинка выходит за рамки, скрывать её */
+    height: 400px;
+    overflow: auto; /* Добавлено для возможности прокрутки, если содержимое выходит за границы */
 }
 
 #svg-container svg {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
+    width: 100%; /* Занимает 100% ширины родительского контейнера */
+    height: 100%; /* Занимает 100% высоты родительского контейнера */
+    display: block; /* Убедитесь, что SVG рассматривается как блочный элемент */
+    margin: 0 auto; /* Центрирует SVG внутри родительского контейнера */
+}
+
+/* Добавьте стили для поддержки масштабирования */
+#svg-container::after {
+    content: ''; /* Создаем фиктивный элемент для выравнивания */
+    display: block;
+    padding-bottom: 100%; /* Это значение определяет соотношение сторон (высота в процентах от ширины) */
 }
         #svg-selector {
             margin-top: 20px;
