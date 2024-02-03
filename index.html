@@ -12,19 +12,21 @@
             margin: 0;
             height: 100vh;
         }
-    #svg-container {
+   #svg-container {
     width: 100%;
     max-width: 600px;
     margin-top: 20px;
     border: 2px solid #007bff;
     box-sizing: border-box;
-    padding: 10px; /* Внутренний отступ для отображения SVG внутри рамки */
+    padding: 10px;
+    height: 400px; /* Задайте фиксированную высоту (замените на необходимую величину) */
+    overflow: hidden; /* Если картинка выходит за рамки, скрывать её */
 }
 
 #svg-container svg {
     width: 100%;
-    height: auto;
-    box-sizing: border-box; /* Учитывать толщину рамки внутри общей ширины SVG */
+    height: 100%;
+    box-sizing: border-box;
 }
         #svg-selector {
             margin-top: 20px;
