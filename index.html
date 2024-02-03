@@ -20,12 +20,17 @@
         }
 
         #svg-container {
-            position: fixed;
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            overflow: auto;
+            overflow: hidden;
             z-index: 999;
+            cursor: grab;
+        }
+
+        #svg-container.grabbing {
+            cursor: grabbing;
         }
 
         svg {
@@ -39,7 +44,7 @@
 
 <body>
     <div id="select-container">
-        <label for="svg-selector">Выберите режим:</label>
+        <label for="svg-selector">Выберите SVG:</label>
         <select id="svg-selector" onchange="loadSVG()">
             <option value="Политическая в карта.svg">Политическая карта</option>
             <option value="Карта Высот.svg">Карта Высот</option>
@@ -48,13 +53,44 @@
         </select>
     </div>
 
-    <div id="svg-container">
+    <div id="svg-container" onmousedown="startDrag(event)" onmouseup="endDrag()" onmouseleave="endDrag()">
         <svg id="loaded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
             <!-- Пустой SVG-контейнер, который будет заполнен при выборе SVG из списка -->
         </svg>
     </div>
 
     <script>
+        var isDragging = false;
+
+        function startDrag(event) {
+            isDragging = true;
+            var svgContainer = document.getElementById("svg-container");
+            var offsetX = event.clientX - svgContainer.getBoundingClientRect().left;
+            var offsetY = event.clientY - svgContainer.getBoundingClientRect().top;
+
+            function dragMove(event) {
+                if (isDragging) {
+                    var x = event.clientX - offsetX;
+                    var y = event.clientY - offsetY;
+                    svgContainer.style.left = x + "px";
+                    svgContainer.style.top = y + "px";
+                }
+            }
+
+            function dragEnd() {
+                isDragging = false;
+                document.removeEventListener("mousemove", dragMove);
+                document.removeEventListener("mouseup", dragEnd);
+            }
+
+            document.addEventListener("mousemove", dragMove);
+            document.addEventListener("mouseup", dragEnd);
+        }
+
+        function endDrag() {
+            isDragging = false;
+        }
+
         function loadSVG() {
             var select = document.getElementById("svg-selector");
             var selectedValue = select.options[select.selectedIndex].value;
