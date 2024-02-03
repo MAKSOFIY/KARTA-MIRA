@@ -28,6 +28,10 @@
         #svg-selector {
             margin-top: 20px;
         }
+        #zoom-in-btn, #zoom-out-btn {
+            margin-top: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -39,10 +43,15 @@
     </select>
     <div id="svg-container">
         <div id="svg-viewport"></div>
+        <button id="zoom-in-btn">Увеличить</button>
+        <button id="zoom-out-btn">Уменьшить</button>
     </div>
     <script>
         const svgContainer = document.getElementById('svg-viewport');
         const svgSelector = document.getElementById('svg-selector');
+        const zoomInBtn = document.getElementById('zoom-in-btn');
+        const zoomOutBtn = document.getElementById('zoom-out-btn');
+        let currentScale = 1;
 
         function loadSvg() {
             const selectedSvg = svgSelector.value;
@@ -50,12 +59,32 @@
                 .then(response => response.text())
                 .then(svgText => {
                     svgContainer.innerHTML = svgText;
+                    currentScale = 1; // Сбросить текущий масштаб при загрузке нового SVG
+                    applyScale();
                 })
                 .catch(error => console.error('Error loading SVG:', error));
         }
 
+        function applyScale() {
+            svgContainer.style.transform = `scale(${currentScale})`;
+        }
+
+        function zoomIn() {
+            currentScale += 0.1;
+            applyScale();
+        }
+
+        function zoomOut() {
+            currentScale -= 0.1;
+            applyScale();
+        }
+
         // Загрузка SVG-файла при выборе нового значения в выпадающем списке
         svgSelector.addEventListener('change', loadSvg);
+
+        // Обработчики для кнопок управления масштабом
+        zoomInBtn.addEventListener('click', zoomIn);
+        zoomOutBtn.addEventListener('click', zoomOut);
 
         // Инициализация при открытии страницы
         loadSvg();
