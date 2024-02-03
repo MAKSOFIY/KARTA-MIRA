@@ -21,9 +21,10 @@
 
         #svg-container {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
             z-index: 999;
             cursor: grab;
@@ -54,7 +55,7 @@
     </div>
 
     <div id="svg-container" onmousedown="startDrag(event)" onmouseup="endDrag()" onmouseleave="endDrag()">
-        <svg id="loaded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <svg id="loaded-svg" xmlns="http://www.w3.org/2000/svg">
             <!-- Пустой SVG-контейнер, который будет заполнен при выборе SVG из списка -->
         </svg>
     </div>
