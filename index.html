@@ -12,13 +12,19 @@
             margin: 0;
             height: 100vh;
         }
-      #svg-container {
+     #svg-container {
     width: 100%;
     max-width: 600px;
-    margin-top: 20px; /* добавил отступ для ясности */
-    border: 5px solid #AFEEEE; /* Добавлен стиль рамки: 2 пикселя, синий цвет (можете изменить цвет на нужный) */
-    box-sizing: border-box; /* Учитывать толщину рамки внутри общей ширины блока */
-       }
+    margin-top: 20px;
+    overflow: hidden; /* Добавлен стиль, чтобы обрезать любое содержимое, выходящее за границы */
+    border: 10px solid #007bff;
+    box-sizing: border-box;
+}
+
+#svg-container svg {
+    width: 100%; /* Убедитесь, что SVG занимает 100% ширины контейнера */
+    height: auto; /* Сохранить пропорции высоты */
+}
 
         #svg-selector {
             margin-top: 20px;
