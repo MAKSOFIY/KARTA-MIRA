@@ -27,9 +27,13 @@
 
         #svgContainer {
             width: 100%;
-            max-width: 800px;
-            height: auto;
-            margin: 20px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #svgObject {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -38,14 +42,16 @@
 <!-- Выпадающий список -->
 <label for="svgSelector">Выберите SVG файл:</label>
 <select id="svgSelector" onchange="loadSVG()">
-    <option value="Политическая карта.svg">Политическая карта</option>
-    <option value="Карта Высот.svg">Карта Высот</option>
-    <option value="Карта Биомов.svg">Карта Биомов</option>
+        <option value="Политическая карта.svg">Политическая карта</option>
+        <option value="Карта Высот.svg">Карта Высот</option>
+        <option value="Карта Биомов.svg">Карта Биомов</option>
     <!-- Добавьте нужные SVG файлы и названия в список -->
 </select>
 
 <!-- Контейнер для SVG -->
-<div id="svgContainer"></div>
+<div id="svgContainer">
+    <object id="svgObject" type="image/svg+xml" data="" width="100%" height="100%"></object>
+</div>
 
 <script>
     // Функция для загрузки выбранного SVG файла
@@ -53,18 +59,5 @@
         var selector = document.getElementById("svgSelector");
         var selectedSVG = selector.options[selector.selectedIndex].value;
 
-        // Получаем контейнер для SVG
-        var svgContainer = document.getElementById("svgContainer");
-
-        // Загружаем SVG файл в контейнер
-        svgContainer.innerHTML = `<object type="image/svg+xml" data="${selectedSVG}" width="100%" height="100%"></object>`;
-    }
-
-    // Инициализируем страницу загрузкой первого SVG файла
-    window.onload = function () {
-        loadSVG();
-    };
-</script>
-
-</body>
-</html>
+        // Получаем объект для SVG
+        var svg
