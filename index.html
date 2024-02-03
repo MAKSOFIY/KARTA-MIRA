@@ -1,76 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Interactive SVG Viewer</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             margin: 0;
-            height: 100vh;
+            padding: 0;
+            overflow: hidden;
         }
-       #svg-container {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    width: 80vw; /* 80% от ширины окна */
-    height: 80vh; /* 80% от высоты окна */
-    overflow: hidden; /* чтобы скрыть части карты за пределами контейнера */
-}
 
-svg {
-    width: 100%;
-    height: 100%;
-    transform-origin: top left; /* установка точки трансформации в верхний левый угол */
-    transition: transform 0.3s ease; /* плавное изменение масштаба с использованием анимации */
-}
+        #svg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-#svg-container:hover svg {
-    transform: scale(1.5); /* пример увеличения масштаба при наведении */
-}
-        #svg-selector {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    z-index: 1000;
-}
+        svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #select-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+        }
     </style>
 </head>
-<body>
-    <select id="svg-selector">
-        <option value="Политическая карта.svg">Политическая карта</option>
-        <option value="Карта Высот.svg">Карта Высот</option>
-        <option value="Карта Биомов.svg">Карта Биомов</option>
-        <!-- Добавьте дополнительные опции для каждого SVG-файла -->
-    </select>
-    <div id="svg-container"></div>
-    <script>
-        const svgContainer = document.getElementById('svg-container');
-        const svgSelector = document.getElementById('svg-selector');
 
-        function loadSvg() {
-            const selectedSvg = svgSelector.value;
-            fetch(selectedSvg)
+<body>
+    <div id="select-container">
+        <label for="svg-selector">Выберите карту:</label>
+        <select id="svg-selector" onchange="loadSVG()">
+            <option value="Политическая карта.svg">Политическая карта</option>
+            <option value="Карта Высот.svg">Карта Высот</option>
+            <option value="Карта Биомов.svg">Карта Биомов</option>
+            <!-- Добавьте другие варианты, если необходимо -->
+        </select>
+    </div>
+
+    <div id="svg-container">
+        <svg id="loaded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <!-- Пустой SVG-контейнер, который будет заполнен при выборе SVG из списка -->
+        </svg>
+    </div>
+
+    <script>
+        function loadSVG() {
+            var select = document.getElementById("svg-selector");
+            var selectedValue = select.options[select.selectedIndex].value;
+            var svgContainer = document.getElementById("loaded-svg");
+
+            // Загрузка выбранного SVG-файла в контейнер
+            fetch(selectedValue)
                 .then(response => response.text())
-                .then(svgText => {
-                    svgContainer.innerHTML = svgText;
+                .then(data => {
+                    svgContainer.innerHTML = data;
                 })
                 .catch(error => console.error('Error loading SVG:', error));
         }
-
-        // Загрузка SVG-файла при выборе нового значения в выпадающем списке
-        svgSelector.addEventListener('change', loadSvg);
-
-        // Инициализация при открытии страницы
-        loadSvg();
     </script>
 </body>
+
 </html>
