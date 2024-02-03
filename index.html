@@ -9,7 +9,7 @@
         body {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: left;
             margin: 0;
             height: 100vh;
         }
@@ -55,55 +55,11 @@
         <button id="zoom-out-btn">Уменьшить</button>
     </div>
     <script>
-        const svgContainer = document.getElementById('svg-viewport');
+        const svgContainer = document.getElementById('svg-container');
+        const svgViewport = document.getElementById('svg-viewport');
         const svgSelector = document.getElementById('svg-selector');
         const zoomInBtn = document.getElementById('zoom-in-btn');
         const zoomOutBtn = document.getElementById('zoom-out-btn');
         let currentScale = 1;
         let isDragging = false;
-        let dragStartX = 0;
-        let dragStartY = 0;
-        let scrollStartX = 0;
-        let scrollStartY = 0;
-
-        function loadSvg() {
-            const selectedSvg = svgSelector.value;
-            fetch(selectedSvg)
-                .then(response => response.text())
-                .then(svgText => {
-                    svgContainer.innerHTML = svgText;
-                    currentScale = 1;
-                    applyScale();
-                })
-                .catch(error => console.error('Error loading SVG:', error));
-        }
-
-        function applyScale() {
-            svgContainer.style.transform = `scale(${currentScale})`;
-        }
-
-        function zoomIn() {
-            currentScale += 0.1;
-            applyScale();
-        }
-
-        function zoomOut() {
-            currentScale -= 0.1;
-            applyScale();
-        }
-
-        function handleMouseDown(event) {
-            if (event.button === 0) {
-                isDragging = true;
-                dragStartX = event.clientX;
-                dragStartY = event.clientY;
-                scrollStartX = svgContainer.scrollLeft;
-                scrollStartY = svgContainer.scrollTop;
-                svgContainer.style.cursor = 'grabbing';
-            }
-        }
-
-        function handleMouseMove(event) {
-            if (isDragging) {
-                const dragDeltaX = event.clientX - dragStartX;
-                const dragDeltaY = event.clientY - d
+        let dragS
