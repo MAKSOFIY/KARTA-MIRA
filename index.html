@@ -18,9 +18,19 @@
             margin-top: 20px;
             border: 2px solid #007bff;
             box-sizing: border-box;
+            overflow: hidden;
+        }
+        #svg-viewport {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
         }
         #svg-selector {
             margin-top: 20px;
+        }
+        #zoom-in-btn, #zoom-out-btn {
+            margin-top: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -31,11 +41,17 @@
         <option value="Карта Биомов.svg">Карта Биомов</option>
         <!-- Добавьте дополнительные опции для каждого SVG-файла -->
     </select>
-    <div id="svg-container"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
+    <div id="svg-container">
+        <div id="svg-viewport"></div>
+        <button id="zoom-in-btn">Увеличить</button>
+        <button id="zoom-out-btn">Уменьшить</button>
+    </div>
     <script>
+        const svgContainer = document.getElementById('svg-viewport');
         const svgSelector = document.getElementById('svg-selector');
-        const svgContainer = document.getElementById('svg-container');
+        const zoomInBtn = document.getElementById('zoom-in-btn');
+        const zoomOutBtn = document.getElementById('zoom-out-btn');
+        let currentScale = 1;
 
         function loadSvg() {
             const selectedSvg = svgSelector.value;
@@ -43,23 +59,32 @@
                 .then(response => response.text())
                 .then(svgText => {
                     svgContainer.innerHTML = svgText;
-                    initPanZoom();
+                    currentScale = 1; // Сбросить текущий масштаб при загрузке нового SVG
+                    applyScale();
                 })
                 .catch(error => console.error('Error loading SVG:', error));
         }
 
-        function initPanZoom() {
-            svgPanZoom(svgContainer, {
-                zoomEnabled: true,
-                controlIconsEnabled: true,
-                fit: true,
-                center: true,
-                contain: true
-            });
+        function applyScale() {
+            svgContainer.style.transform = `scale(${currentScale})`;
+        }
+
+        function zoomIn() {
+            currentScale += 0.1;
+            applyScale();
+        }
+
+        function zoomOut() {
+            currentScale -= 0.1;
+            applyScale();
         }
 
         // Загрузка SVG-файла при выборе нового значения в выпадающем списке
         svgSelector.addEventListener('change', loadSvg);
+
+        // Обработчики для кнопок управления масштабом
+        zoomInBtn.addEventListener('click', zoomIn);
+        zoomOutBtn.addEventListener('click', zoomOut);
 
         // Инициализация при открытии страницы
         loadSvg();
