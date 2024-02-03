@@ -8,34 +8,23 @@
         body {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: left;
             margin: 0;
             height: 100vh;
         }
-  #svg-container {
-    width: 100%;
-    max-width: 600px;
-    margin-top: 20px;
-    border: 2px solid #007bff;
-    box-sizing: border-box;
-    padding: 10px;
-    height: 400px;
-    overflow: auto; /* Добавлено для возможности прокрутки, если содержимое выходит за границы */
-}
-
-#svg-container svg {
-    width: 100%; /* Занимает 100% ширины родительского контейнера */
-    height: 100%; /* Занимает 100% высоты родительского контейнера */
-    display: block; /* Убедитесь, что SVG рассматривается как блочный элемент */
-    margin: 0 auto; /* Центрирует SVG внутри родительского контейнера */
-}
-
-/* Добавьте стили для поддержки масштабирования */
-#svg-container::after {
-    content: ''; /* Создаем фиктивный элемент для выравнивания */
-    display: block;
-    padding-bottom: 100%; /* Это значение определяет соотношение сторон (высота в процентах от ширины) */
-}
+        #svg-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            border: 2px solid #007bff;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        #svg-viewport {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        }
         #svg-selector {
             margin-top: 20px;
         }
@@ -44,13 +33,15 @@
 <body>
     <select id="svg-selector">
         <option value="Политическая карта.svg">Политическая карта</option>
-            <option value="Карта Высот.svg">Карта Высот</option>
-            <option value="Карта Биомов.svg">Карта Биомов</option>
+        <option value="Карта Высот.svg">Карта Высот</option>
+        <option value="Карта Биомов.svg">Карта Биомов</option>
         <!-- Добавьте дополнительные опции для каждого SVG-файла -->
     </select>
-    <div id="svg-container"></div>
+    <div id="svg-container">
+        <div id="svg-viewport"></div>
+    </div>
     <script>
-        const svgContainer = document.getElementById('svg-container');
+        const svgContainer = document.getElementById('svg-viewport');
         const svgSelector = document.getElementById('svg-selector');
 
         function loadSvg() {
