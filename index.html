@@ -12,38 +12,37 @@
             overflow: hidden;
         }
 
-        #svg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        svg {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
         #select-container {
             position: fixed;
             top: 10px;
             left: 10px;
             z-index: 1000;
         }
+
+        #svg-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: auto;
+            z-index: 999;
+        }
+
+        svg {
+            display: block;
+            margin: auto;
+            width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 
 <body>
     <div id="select-container">
-        <label for="svg-selector">Выберите карту:</label>
-        <select id="svg-selector" onchange="loadSVG()">
-            <option value="Политическая карта.svg">Политическая карта</option>
+        <label for="svg-selector">Выберите Режим:</label>
+                    <option value="Политическая карта.svg">Политическая карта</option>
             <option value="Карта Высот.svg">Карта Высот</option>
             <option value="Карта Биомов.svg">Карта Биомов</option>
-            <!-- Добавьте другие варианты, если необходимо -->
         </select>
     </div>
 
