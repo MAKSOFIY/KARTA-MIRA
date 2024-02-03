@@ -8,7 +8,7 @@
         body {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: left;
             margin: 0;
             height: 100vh;
         }
@@ -23,8 +23,6 @@
             margin-top: 20px;
         }
     </style>
-    <!-- Добавьте эту ссылку в раздел head -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
 </head>
 <body>
     <select id="svg-selector">
@@ -34,6 +32,7 @@
         <!-- Добавьте дополнительные опции для каждого SVG-файла -->
     </select>
     <div id="svg-container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
     <script>
         const svgSelector = document.getElementById('svg-selector');
         const svgContainer = document.getElementById('svg-container');
