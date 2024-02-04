@@ -3,101 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG Viewer</title>
+    <title>Карта Мира</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             margin: 0;
-            height: 100vh;
-        }
-        .svg-container {
-            width: 100%;
-            max-width: 600px;
-            margin-top: 20px;
-            border: 2px solid #007bff;
-            box-sizing: border-box;
             overflow: hidden;
-            user-select: none; /* Запретить выделение текста */
-            cursor: grab; /* Изменить курсор при перемещении */
         }
-        #svg-selector {
-            margin-top: 20px;
-            max-width: 600px;
+
+        select {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 5px;
+            z-index: 999;
+        }
+
+        iframe {
             width: 100%;
+            height: 100vh;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     </style>
 </head>
 <body>
-    <select id="svg-selector">
+    <select id="svgSelector" onchange="changeSVG()">
         <option value="Карта Политики.svg">Политическая карта</option>
         <option value="Карта Высот.svg">Карта Высот</option>
         <option value="Карта Биомов.svg">Карта Биомов</option>
-        <!-- Добавьте дополнительные опции для каждого SVG-файла -->
+        <!-- Добавьте другие файлы в качестве значений опций -->
     </select>
-    
-    <div id="svg-container" class="svg-container"></div>
+
+    <iframe id="svgFrame" src="Карта Политики.svg"></iframe>
 
     <script>
-        const svgSelector = document.getElementById('svg-selector');
-        const svgContainer = document.getElementById('svg-container');
-
-        function loadSvg(selectedSvg) {
-            fetch(selectedSvg)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Failed to fetch SVG: ${selectedSvg}`);
-                    }
-                    return response.text();
-                })
-                .then(svgText => {
-                    svgContainer.innerHTML = svgText;
-                    enablePanZoom();
-                })
-                .catch(error => {
-                    console.error(error.message);
-                    svgContainer.innerHTML = `Error loading SVG: ${error.message}`;
-                });
+        function changeSVG() {
+            var selector = document.getElementById("svgSelector");
+            var selectedValue = selector.options[selector.selectedIndex].value;
+            var iframe = document.getElementById("svgFrame");
+            iframe.src = selectedValue;
         }
-
-        function enablePanZoom() {
-            let isDragging = false;
-            let startPoint;
-
-            svgContainer.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                startPoint = { x: e.clientX, y: e.clientY };
-                svgContainer.style.cursor = 'grabbing';
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-                const deltaX = e.clientX - startPoint.x;
-                const deltaY = e.clientY - startPoint.y;
-                startPoint = { x: e.clientX, y: e.clientY };
-                svgContainer.scrollLeft += deltaX;
-                svgContainer.scrollTop += deltaY;
-            });
-
-            window.addEventListener('mouseup', () => {
-                isDragging = false;
-                svgContainer.style.cursor = 'grab';
-            });
-
-            svgContainer.addEventListener('wheel', (e) => {
-                const scaleFactor = e.deltaY > 0 ? 1.1 : 0.9;
-                svgContainer.style.transform = `scale(${scaleFactor})`;
-            });
-        }
-
-        svgSelector.addEventListener('change', function() {
-            const selectedValue = svgSelector.value;
-            loadSvg(selectedValue);
-        });
-
-        // Инициализация при открытии страницы
-        loadSvg(svgSelector.value);
     </script>
 </body>
 </html>
