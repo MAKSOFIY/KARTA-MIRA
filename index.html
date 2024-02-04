@@ -3,14 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта мира</title>
+    <title>Карта Мира</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        select {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 5px;
+            z-index: 999;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
 </head>
 <body>
+    <select id="svgSelector" onchange="changeSVG()">
+        <option value="Политическая карта.svg">Политическая карта</option>
+        <option value="Карта Высот.svg">Карта Высот</option>
+        <option value="Карта Биомов.svg">Карта Биомов</option>
+        <!-- Добавьте другие файлы в качестве значений опций -->
+    </select>
 
-    <img src="Политическая карта.svg" 
-        type="image/svg+xml" 
-        width="2000"
-        height="2000">
+    <iframe id="svgFrame" src="Политическая карта.svg"></iframe>
 
+    <script>
+        function changeSVG() {
+            var selector = document.getElementById("svgSelector");
+            var selectedValue = selector.options[selector.selectedIndex].value;
+            var iframe = document.getElementById("svgFrame");
+            iframe.src = selectedValue;
+        }
+    </script>
 </body>
 </html>
