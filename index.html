@@ -36,7 +36,7 @@
         <!-- Добавьте другие файлы в качестве значений опций -->
     </select>
 
-    <iframe id="svgFrame" src="Карта Политики.svg"></iframe>
+    <iframe id="svgFrame" src="Карта Политики.svg" onload="setZoom('svgFrame', 1.0)"></iframe>
 
     <script>
         function changeSVG() {
@@ -44,6 +44,14 @@
             var selectedValue = selector.options[selector.selectedIndex].value;
             var iframe = document.getElementById("svgFrame");
             iframe.src = selectedValue;
+            setZoom('svgFrame', 1.0); // Сброс приближения при смене файла
+        }
+
+        function setZoom(iframeId, zoom) {
+            var iframe = document.getElementById(iframeId);
+            var contentDocument = iframe.contentDocument || iframe.contentWindow.document;
+            contentDocument.documentElement.setAttribute('viewBox', `0 0 ${iframe.clientWidth * zoom} ${iframe.clientHeight * zoom}`);
+            iframe.style.width = (iframe.clientWidth * zoom) + 'px';
         }
     </script>
 </body>
