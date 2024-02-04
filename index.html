@@ -25,6 +25,7 @@
             position: absolute;
             top: 0;
             left: 0;
+            transform-origin: top left;
         }
     </style>
 </head>
@@ -36,7 +37,7 @@
         <!-- Добавьте другие файлы в качестве значений опций -->
     </select>
 
-    <iframe id="svgFrame" src="Карта Политики.svg" onload="setZoom('svgFrame', 1.0)"></iframe>
+    <iframe id="svgFrame" src="Карта Политики.svg"></iframe>
 
     <script>
         function changeSVG() {
@@ -49,9 +50,7 @@
 
         function setZoom(iframeId, zoom) {
             var iframe = document.getElementById(iframeId);
-            var contentDocument = iframe.contentDocument || iframe.contentWindow.document;
-            contentDocument.documentElement.setAttribute('viewBox', `0 0 ${iframe.clientWidth * zoom} ${iframe.clientHeight * zoom}`);
-            iframe.style.width = (iframe.clientWidth * zoom) + 'px';
+            iframe.style.transform = `scale(${zoom})`;
         }
     </script>
 </body>
