@@ -3,11 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта мира</title>
+    <title>Галерея SVG</title>
+    <style>
+        /* Стили для позиционирования выпадающего списка */
+        #svgSelector {
+            position: fixed;
+            top: 10px; /* Верхний отступ */
+            left: 10px; /* Левый отступ */
+        }
+    </style>
 </head>
 <body>
 
-<img src="Карта Политики.svg" alt="SVG Image">
+<!-- Добавлен выпадающий список с изображениями -->
+<select id="svgSelector" onchange="changeSVG()">
+    <option value="Карта Политики.svg">Карта Политики</option>
+    <option value="Карта Высот.svg">Карта Высот</option>
+    <option value="Карта Биомов.svg">Карта Биомов</option>
+    <!-- Добавьте другие опции с разными изображениями SVG -->
+</select>
+
+<!-- Изображение SVG -->
+<img id="svgImage" src="Карта Политики.svg" alt="SVG Image">
+
+<script>
+    // Функция для изменения источника изображения при выборе опции
+    function changeSVG() {
+        var select = document.getElementById("svgSelector");
+        var image = document.getElementById("svgImage");
+        image.src = select.value;
+    }
+</script>
 
 </body>
 </html>
