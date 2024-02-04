@@ -48,25 +48,25 @@
             biomes: document.getElementById('svg-container-biomes')
         };
 
-        function loadSvg(selectedContainer, selectedSvg) {
-            fetch(selectedSvg)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('SVG file not found');
-                    }
-                    return response.text();
-                })
-                .then(svgText => {
-                    selectedContainer.innerHTML = svgText;
-                    initPanZoom(selectedContainer);
-                    selectedContainer.style.display = 'block';
-                })
-                .catch(error => {
-                    console.error('Error loading SVG:', error);
-                    selectedContainer.innerHTML = 'SVG file not found';
-                    selectedContainer.style.display = 'block';
-                });
-        }
+       function loadSvg(selectedContainer, selectedSvg) {
+    fetch(selectedSvg)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch SVG: ${selectedSvg}`);
+            }
+            return response.text();
+        })
+        .then(svgText => {
+            selectedContainer.innerHTML = svgText;
+            initPanZoom(selectedContainer);
+            selectedContainer.style.display = 'block';
+        })
+        .catch(error => {
+            console.error(error.message);
+            selectedContainer.innerHTML = `Error loading SVG: ${error.message}`;
+            selectedContainer.style.display = 'block';
+        });
+}
 
         function initPanZoom(container) {
             svgPanZoom(container, {
