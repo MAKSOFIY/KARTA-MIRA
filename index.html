@@ -18,7 +18,7 @@
             margin-top: 20px;
             border: 2px solid #007bff;
             box-sizing: border-box;
-            overflow: hidden; /* Добавлено */
+            overflow: hidden;
         }
         #svg-selector {
             margin-top: 20px;
@@ -29,7 +29,7 @@
 </head>
 <body>
     <select id="svg-selector">
-        <option value="Политическая карта.svg">Политическая карта</option>
+        <option value="Карта Политики.svg">Политическая карта</option>
         <option value="Карта Высот.svg">Карта Высот</option>
         <option value="Карта Биомов.svg">Карта Биомов</option>
         <!-- Добавьте дополнительные опции для каждого SVG-файла -->
@@ -50,13 +50,22 @@
 
         function loadSvg(selectedContainer, selectedSvg) {
             fetch(selectedSvg)
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('SVG file not found');
+                    }
+                    return response.text();
+                })
                 .then(svgText => {
                     selectedContainer.innerHTML = svgText;
                     initPanZoom(selectedContainer);
                     selectedContainer.style.display = 'block';
                 })
-                .catch(error => console.error('Error loading SVG:', error));
+                .catch(error => {
+                    console.error('Error loading SVG:', error);
+                    selectedContainer.innerHTML = 'SVG file not found';
+                    selectedContainer.style.display = 'block';
+                });
         }
 
         function initPanZoom(container) {
