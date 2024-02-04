@@ -8,7 +8,7 @@
         body {
             display: flex;
             flex-direction: column;
-            align-items: left;
+            align-items: center; /* Изменено выравнивание по центру */
             margin: 0;
             height: 100vh;
         }
@@ -18,10 +18,12 @@
             margin-top: 20px;
             border: 2px solid #007bff;
             box-sizing: border-box;
-            display: none; /* Скрываем все контейнеры по умолчанию */
+            display: none;
         }
         #svg-selector {
             margin-top: 20px;
+            max-width: 600px; /* Добавлено максимальное значение для выпадающего списка */
+            width: 100%; /* Ширина на 100% от родительского контейнера */
         }
     </style>
 </head>
@@ -52,7 +54,7 @@
                 .then(svgText => {
                     selectedContainer.innerHTML = svgText;
                     initPanZoom(selectedContainer);
-                    selectedContainer.style.display = 'block'; // Показываем выбранный контейнер
+                    selectedContainer.style.display = 'block';
                 })
                 .catch(error => console.error('Error loading SVG:', error));
         }
@@ -67,9 +69,11 @@
             });
         }
 
-        // Загрузка SVG-файла при выборе нового значения в выпадающем списке
         svgSelector.addEventListener('change', function() {
             const selectedValue = svgSelector.value;
+            Object.values(svgContainers).forEach(container => {
+                container.style.display = 'none'; // Скрываем все контейнеры
+            });
             switch (selectedValue) {
                 case 'Политическая карта.svg':
                     loadSvg(svgContainers.political, selectedValue);
@@ -84,7 +88,6 @@
             }
         });
 
-        // Инициализация при открытии страницы
         loadSvg(svgContainers.political, 'Политическая карта.svg');
     </script>
 </body>
