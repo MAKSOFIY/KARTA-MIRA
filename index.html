@@ -8,7 +8,7 @@
         body {
             display: flex;
             flex-direction: column;
-            align-items: center; /* Изменено выравнивание по центру */
+            align-items: center;
             margin: 0;
             height: 100vh;
         }
@@ -18,12 +18,12 @@
             margin-top: 20px;
             border: 2px solid #007bff;
             box-sizing: border-box;
-            display: none;
+            overflow: hidden; /* Добавлено */
         }
         #svg-selector {
             margin-top: 20px;
-            max-width: 600px; /* Добавлено максимальное значение для выпадающего списка */
-            width: 100%; /* Ширина на 100% от родительского контейнера */
+            max-width: 600px;
+            width: 100%;
         }
     </style>
 </head>
@@ -72,7 +72,7 @@
         svgSelector.addEventListener('change', function() {
             const selectedValue = svgSelector.value;
             Object.values(svgContainers).forEach(container => {
-                container.style.display = 'none'; // Скрываем все контейнеры
+                container.style.display = 'none';
             });
             switch (selectedValue) {
                 case 'Политическая карта.svg':
@@ -84,7 +84,6 @@
                 case 'Карта Биомов.svg':
                     loadSvg(svgContainers.biomes, selectedValue);
                     break;
-                // Добавьте дополнительные кейсы при необходимости
             }
         });
 
