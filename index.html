@@ -11,9 +11,17 @@
             top: 10px; /* Верхний отступ */
             left: 10px; /* Левый отступ */
         }
+        #svgContainer {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 1800px;
+            height: 600px; /* Установите желаемую высоту карты */
+        }
         #svgImage {
-            width: 200%; /* Установите желаемую ширину карты, например, 100% для полного ширины экрана */
-            max-width: 1800px; /* Опционально: установите максимальную ширину для предотвращения излишнего увеличения */
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease; /* Добавим плавную анимацию при масштабировании */
         }
     </style>
 </head>
@@ -27,8 +35,11 @@
     <!-- Добавьте другие опции с разными изображениями SVG -->
 </select>
 
-<!-- Изображение SVG -->
-<img id="svgImage" src="Карта Политики.svg" alt="SVG Image" loading="lazy">
+<!-- Контейнер для SVG с поддержкой прокрутки и масштабирования -->
+<div id="svgContainer">
+    <!-- Изображение SVG -->
+    <img id="svgImage" src="Карта Политики.svg" alt="SVG Image">
+</div>
 
 <script>
     // Функция для изменения источника изображения при выборе опции
@@ -36,7 +47,41 @@
         var select = document.getElementById("svgSelector");
         var image = document.getElementById("svgImage");
         image.src = select.value;
+        resetTransform(); // Сбросить масштаб и позицию при смене изображения
     }
+
+    // Функция для сброса масштаба и позиции
+    function resetTransform() {
+        var container = document.getElementById("svgContainer");
+        container.style.transform = "none";
+    }
+
+    // Добавляем обработчики для прокрутки и масштабирования
+    var container = document.getElementById("svgContainer");
+    var isDragging = false;
+    var startOffset = { x: 0, y: 0 };
+
+    container.addEventListener("mousedown", function (e) {
+        isDragging = true;
+        startOffset = { x: e.clientX, y: e.clientY };
+    });
+
+    document.addEventListener("mousemove", function (e) {
+        if (isDragging) {
+            var offsetX = e.clientX - startOffset.x;
+            var offsetY = e.clientY - startOffset.y;
+            container.style.transform = "translate(" + offsetX + "px, " + offsetY + "px)";
+        }
+    });
+
+    document.addEventListener("mouseup", function () {
+        isDragging = false;
+    });
+
+    container.addEventListener("wheel", function (e) {
+        var scaleFactor = e.deltaY > 0 ? 1.1 : 0.9;
+        container.style.transform = "scale(" + scaleFactor + ")";
+    });
 </script>
 
 </body>
