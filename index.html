@@ -3,64 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Галерея SVG</title>
+    <title>Карта Мира</title>
     <style>
-        /* Стили для позиционирования выпадающего списка */
-        #svgSelector {
-            position: fixed;
-            top: 10px; /* Верхний отступ */
-            left: 10px; /* Левый отступ */
-            z-index: 2; /* Установим z-index, чтобы выпадающий список был выше */
+        body {
+            margin: 0;
+            overflow: hidden;
         }
-        #svgImage {
-            width: 100%; /* Установите желаемую ширину карты, например, 100% для полного ширины экрана */
-            max-width: 1800px; /* Опционально: установите максимальную ширину для предотвращения излишнего увеличения */
-            z-index: 1; /* Установим z-index, чтобы карта была ниже */
+
+        select {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 5px;
+            z-index: 999;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     </style>
 </head>
 <body>
+    <select id="svgSelector" onchange="changeSVG()">
+        <option value="Карта Политики.svg">Политическая карта</option>
+        <option value="Карта Высот.svg">Карта Высот</option>
+        <option value="Карта Биомов.svg">Карта Биомов</option>
+        <!-- Добавьте другие файлы в качестве значений опций -->
+    </select>
 
-<!-- Добавлен выпадающий список с изображениями -->
-<select id="svgSelector" onchange="changeSVG()">
-    <option value="Карта Политики.svg">Карта Политики</option>
-    <option value="Карта Высот.svg">Карта Высот</option>
-    <option value="Карта Биомов.svg">Карта Биомов</option>
-    <!-- Добавьте другие опции с разными изображениями SVG -->
-</select>
+    <iframe id="svgFrame" src="Карта Политики.svg"></iframe>
 
-<!-- Изображение SVG -->
-<object id="svgObject" type="image/svg+xml" data="Карта Политики.svg"
-        data-srcset="Карта Политики_small.svg 480w, Карта Политики_medium.svg 800w, Карта Политики_large.svg 1200w"
-        width="100%" height="100%"></object>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.5.0/svg-pan-zoom.min.js"></script>
-<script>
-    // Функция для изменения источника изображения при выборе опции
-    function changeSVG() {
-        var select = document.getElementById("svgSelector");
-        var svgImage = document.getElementById("svgImage");
-
-        // Загрузка нового SVG
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                svgImage.innerHTML = xhr.responseText;
-
-                // Инициализация svg-pan-zoom
-                svgPanZoom(svgImage, {
-                    zoomEnabled: true,
-                    controlIconsEnabled: true,
-                    fit: true,
-                    center: true,
-                });
-            }
-        };
-        xhr.open("GET", select.value, true);
-        xhr.send();
-    }
-</script>
-
+    <script>
+        function changeSVG() {
+            var selector = document.getElementById("svgSelector");
+            var selectedValue = selector.options[selector.selectedIndex].value;
+            var iframe = document.getElementById("svgFrame");
+            iframe.src = selectedValue;
+        }
+    </script>
 </body>
 </html>
