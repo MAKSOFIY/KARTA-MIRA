@@ -18,7 +18,7 @@
             z-index: 999;
         }
 
-        iframe {
+       svgImage {
             width: 100%;
             height: 100vh;
             border: none;
@@ -36,13 +36,14 @@
         <!-- Добавьте другие файлы в качестве значений опций -->
     </select>
 
-    <iframe id="svgFrame" src="Карта Политики.svg"></iframe>
+   <!-- Изображение SVG -->
+<img id="svgImage" src="Карта Политики.svg" alt="SVG Image">
 
     <script>
         function changeSVG() {
             var selector = document.getElementById("svgSelector");
             var selectedValue = selector.options[selector.selectedIndex].value;
-            var iframe = document.getElementById("svgFrame");
+            var svgImage = document.getElementById("svgFrame");
             iframe.src = selectedValue;
         }
     </script>
