@@ -18,13 +18,13 @@
             z-index: 999;
         }
 
-        iframe {
-            width: 100%;
-            height: 100vh;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
+        #magnificPopup {
+            display: none;
+        }
+
+        #magnificPopup img {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
@@ -38,6 +38,12 @@
 
     <iframe id="svgFrame" src="P.svg"></iframe>
 
+    <div id="magnificPopup">
+        <img id="zoomImage" src="" alt="Zoomed Image">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
     <script>
         function changeSVG() {
             var selector = document.getElementById("svgSelector");
@@ -45,6 +51,39 @@
             var iframe = document.getElementById("svgFrame");
             iframe.src = selectedValue;
         }
+
+        $(document).ready(function() {
+            $('#magnificPopup').magnificPopup({
+                type: 'image',
+                closeOnContentClick: true,
+                closeBtnInside: false,
+                fixedContentPos: true,
+                image: {
+                    verticalFit: true,
+                    titleSrc: function(item) {
+                        return item.el.attr('title');
+                    }
+                },
+                gallery: {
+                    enabled: true
+                },
+                zoom: {
+                    enabled: true,
+                    duration: 300,
+                    easing: 'ease-in-out'
+                }
+            });
+
+            $('#svgFrame').contents().find('svg').on('mousewheel DOMMouseScroll', function(e) {
+                var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;
+                if (delta > 0) {
+                    $('#magnificPopup').magnificPopup('open', 0);
+                } else {
+                    $('#magnificPopup').magnificPopup('close');
+                }
+                return false;
+            });
+        });
     </script>
 </body>
 </html>
