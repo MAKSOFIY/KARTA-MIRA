@@ -30,13 +30,13 @@
 </head>
 <body>
     <select id="svgSelector" onchange="changeSVG()">
-        <option value="P.svg">Политическая карта</option>
+        <option value="P.svg" selected>Политическая карта</option>
         <option value="V.svg">Карта Высот</option>
         <option value="B.svg">Карта Биомов</option>
         <!-- Добавьте другие файлы в качестве значений опций -->
     </select>
 
-    <iframe id="svgFrame" src="Карта Политики.svg"></iframe>
+    <iframe id="svgFrame" src="P.svg"></iframe>
 
     <script>
         function changeSVG() {
