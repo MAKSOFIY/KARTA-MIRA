@@ -3,87 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта Мира</title>
+    <title>Interactive SVG World Map</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
+        #mapContainer {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
         }
-
-        select {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            padding: 5px;
-            z-index: 999;
-        }
-
-        #magnificPopup {
-            display: none;
-        }
-
-        #magnificPopup img {
-            max-width: 100%;
+        #map {
+            width: 100%;
             height: auto;
+            display: block;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    <select id="svgSelector" onchange="changeSVG()">
-        <option value="P.svg" selected>Политическая карта</option>
-        <option value="V.svg">Карта Высот</option>
-        <option value="B.svg">Карта Биомов</option>
-        <!-- Добавьте другие файлы в качестве значений опций -->
-    </select>
-
-    <iframe id="svgFrame" src="P.svg"></iframe>
-
-    <div id="magnificPopup">
-        <img id="zoomImage" src="" alt="Zoomed Image">
+    <div id="mapContainer">
+        <img id="map" src="P.svg" alt="World Map">
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
     <script>
-        function changeSVG() {
-            var selector = document.getElementById("svgSelector");
-            var selectedValue = selector.options[selector.selectedIndex].value;
-            var iframe = document.getElementById("svgFrame");
-            iframe.src = selectedValue;
-        }
+        window.onload = function() {
+            var map = document.getElementById('map');
+            var container = document.getElementById('mapContainer');
+            var scaleFactor = 1;
 
-        $(document).ready(function() {
-            $('#magnificPopup').magnificPopup({
-                type: 'image',
-                closeOnContentClick: true,
-                closeBtnInside: false,
-                fixedContentPos: true,
-                image: {
-                    verticalFit: true,
-                    titleSrc: function(item) {
-                        return item.el.attr('title');
-                    }
-                },
-                gallery: {
-                    enabled: true
-                },
-                zoom: {
-                    enabled: true,
-                    duration: 300,
-                    easing: 'ease-in-out'
+            // Zoom on mouse wheel
+            container.addEventListener('wheel', function(event) {
+                event.preventDefault();
+                var delta = Math.max(-1, Math.min(1, (event.deltaY || -event.detail)));
+                scaleFactor += delta * 0.1;
+                scaleFactor = Math.min(Math.max(0.5, scaleFactor), 3); // Limit scale factor
+                map.style.transform = 'scale(' + scaleFactor + ')';
+            });
+
+            // Drag to pan
+            var isDragging = false;
+            var startX, startY, translateX, translateY;
+            container.addEventListener('mousedown', function(event) {
+                isDragging = true;
+                startX = event.clientX - container.offsetLeft;
+                startY = event.clientY - container.offsetTop;
+                translateX = container.scrollLeft;
+                translateY = container.scrollTop;
+            });
+
+            container.addEventListener('mousemove', function(event) {
+                if (isDragging) {
+                    var deltaX = event.clientX - container.offsetLeft - startX;
+                    var deltaY = event.clientY - container.offsetTop - startY;
+                    container.scrollLeft = translateX - deltaX;
+                    container.scrollTop = translateY - deltaY;
                 }
             });
 
-            $('#svgFrame').contents().find('svg').on('mousewheel DOMMouseScroll', function(e) {
-                var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;
-                if (delta > 0) {
-                    $('#magnificPopup').magnificPopup('open', 0);
-                } else {
-                    $('#magnificPopup').magnificPopup('close');
-                }
-                return false;
+            container.addEventListener('mouseup', function() {
+                isDragging = false;
             });
-        });
+
+            // Touch events for mobile devices
+            container.addEventListener('touchstart', function(event) {
+                if (event.touches.length === 1) {
+                    isDragging = true;
+                    startX = event.touches[0].clientX - container.offsetLeft;
+                    startY = event.touches[0].clientY - container.offsetTop;
+                    translateX = container.scrollLeft;
+                    translateY = container.scrollTop;
+                }
+            });
+
+            container.addEventListener('touchmove', function(event) {
+                if (isDragging && event.touches.length === 1) {
+                    var deltaX = event.touches[0].clientX - container.offsetLeft - startX;
+                    var deltaY = event.touches[0].clientY - container.offsetTop - startY;
+                    container.scrollLeft = translateX - deltaX;
+                    container.scrollTop = translateY - deltaY;
+                }
+            });
+
+            container.addEventListener('touchend', function() {
+                isDragging = false;
+            });
+        };
     </script>
 </body>
 </html>
