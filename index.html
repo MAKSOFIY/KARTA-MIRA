@@ -34,7 +34,7 @@
             container.addEventListener('wheel', function(event) {
                 event.preventDefault();
                 var delta = Math.max(-1, Math.min(1, (event.deltaY || -event.detail)));
-                scaleFactor += delta * 0.1;
+                scaleFactor += delta * 0.3;
                 scaleFactor = Math.min(Math.max(0.5, scaleFactor), 3); // Limit scale factor
                 map.style.transform = 'scale(' + scaleFactor + ')';
             });
